@@ -17,11 +17,13 @@ class RSOCalendar extends StatefulWidget {
 class _RSOCalendarState extends State<RSOCalendar> {
   @override
   Widget build(BuildContext context) {
-    const darkTheme = CupertinoThemeData(
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: Colors.black,
-      barBackgroundColor: AppColors.secondaryUofIDark,
-      primaryColor: AppColors.secondaryUofILightest,
+    var darkTheme = const CupertinoThemeData.raw(
+      Brightness.dark,
+      AppColors.secondaryUofILightest,
+      AppColors.secondaryUofILight,
+      CupertinoTextThemeData(textStyle: TextStyle(color: Colors.white)),
+      AppColors.secondaryUofIDark,
+      Colors.black,
     );
     const lightTheme = CupertinoThemeData(
       brightness: Brightness.light,
@@ -29,54 +31,54 @@ class _RSOCalendarState extends State<RSOCalendar> {
       barBackgroundColor: AppColors.secondaryUofILight,
       primaryColor: AppColors.secondaryUofILightest,
     );
-    return PlatformProvider(
-      settings: PlatformSettingsData(iosUsesMaterialWidgets: true),
-      builder: (context) => PlatformApp(
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          DefaultMaterialLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-        ],
-        title: "RSO Calendar",
-        home: const RSOCalendarTabs(),
-        material: (_, __) => MaterialAppData(
-          theme: ThemeData(
-            brightness: Brightness.light,
-            scaffoldBackgroundColor: Colors.white,
-            canvasColor: Colors.white,
-            inputDecorationTheme: const InputDecorationTheme(
-              hintStyle: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.white,
-            colorScheme: const ColorScheme.light(),
-            appBarTheme: const AppBarTheme(
-              backgroundColor: AppColors.secondaryUofILight,
-              actionsIconTheme: IconThemeData(color: Colors.white),
-              iconTheme: IconThemeData(color: Colors.white),
-            ),
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: Colors.black,
-            backgroundColor: Colors.black,
-            colorScheme: const ColorScheme.dark(),
-            canvasColor: Colors.black,
-            inputDecorationTheme: const InputDecorationTheme(
-              hintStyle: TextStyle(color: Colors.white),
-            ),
-            appBarTheme: const AppBarTheme(
-              backgroundColor: AppColors.primaryUofI,
-              actionsIconTheme: IconThemeData(color: Colors.white),
-              iconTheme: IconThemeData(color: Colors.white),
-            ),
-          ),
-          themeMode: ThemeMode.system,
+    return MaterialApp(
+      theme: ThemeData.light().copyWith(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
+        canvasColor: Colors.white,
+        inputDecorationTheme: const InputDecorationTheme(
+          hintStyle: TextStyle(color: Colors.white),
         ),
-        cupertino: (_, __) => CupertinoAppData(
-          theme: MediaQuery.of(context).platformBrightness == Brightness.light
-              ? lightTheme
-              : darkTheme,
+        backgroundColor: Colors.white,
+        colorScheme: const ColorScheme.light(),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.secondaryUofILight,
+          actionsIconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: Colors.black,
+        backgroundColor: Colors.black,
+        colorScheme: const ColorScheme.dark(),
+        canvasColor: Colors.black,
+        inputDecorationTheme: const InputDecorationTheme(
+          hintStyle: TextStyle(color: Colors.white),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.primaryUofI,
+          actionsIconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+      ),
+      home: PlatformProvider(
+        settings: PlatformSettingsData(iosUsesMaterialWidgets: true),
+        builder: (context) => PlatformApp(
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            DefaultMaterialLocalizations.delegate,
+            DefaultWidgetsLocalizations.delegate,
+            DefaultCupertinoLocalizations.delegate,
+          ],
+          title: "RSO Calendar",
+          home: const RSOCalendarTabs(),
+          material: (_, __) => MaterialAppData(
+            themeMode: ThemeMode.system,
+          ),
+          cupertino: (ctx, __) => CupertinoAppData(
+            debugShowCheckedModeBanner: false,
+          ),
         ),
       ),
     );
@@ -129,7 +131,9 @@ class _RSOCalendarTabsState extends State<RSOCalendarTabs> {
     contentBuilder = (BuildContext context, int index) => SliverView(
           title: titles[index],
           children: [widgets[index]],
-          actions: const [],
+          actions: const [
+            SizedBox(),
+          ],
           // TODO: implement firebase or shibboleth to get user data to show on the settings page.
           // drawer: SettingsDrawer(),
           leading: null,
